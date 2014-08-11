@@ -21,21 +21,24 @@ run :: [String] -> IO String
 run (pname:args) = readProcess pname args ""
 run _ = return "No command specified."
 
-handleEvent :: [String] -> FSN.Event -> IO ()
-handleEvent cmd evt = do
-  print' evt
-  run cmd >>= putStrLn'
-
-watchConfig :: FSN.WatchConfig
-watchConfig = FSN.WatchConfig (FSN.Debounce (10^(12::Int))) 1000 False
+watch :: [String] -> IO ()
+watch cmd = do
+  mgr <- FSN.startManager
+  _ <- FSN.watchTree mgr "." (const True) $ \evt -> do
+    _ <- FSN.stopManager mgr
+    print' evt
+    putStrLn' $ unwords cmd
+    run cmd >>= putStrLn'
+    watch cmd
+  return ()
 
 main :: IO ()
-main = FSN.withManagerConf watchConfig $ \mgr -> do
+main = do
   cmd <- getArgs
-  _ <- FSN.watchTree mgr "." (const True) (handleEvent cmd)
-
   if null cmd
-    then putStrLn' "please provide command string."
-    else (putStrLn' $ "fmon starting... command = " ++ (unwords cmd))
-      >> (forever $ threadDelay maxBound)
+    then putStrLn' "Please provide a command as a argument."
+    else do
+      putStrLn' $ "fmon starting... command = " ++ (unwords cmd)
+      watch cmd
+      forever $ threadDelay maxBound
 
