@@ -1,5 +1,5 @@
 import Test.DocTest
 
 main :: IO ()
-main = doctest ["-isrc", "fmon.hs"]
+main = doctest ["-isrc", "watch.hs", "optionparser.hs"]
 

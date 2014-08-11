@@ -1,51 +1,34 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
-import System.Environment (getArgs)
-import System.Process (readProcess)
-import qualified System.FSNotify as FSN
+module Main where
+import Watch
+import OptionParser
+import Paths_fmon (version)  -- read from cabal file.
+import Data.Version (showVersion)
+import System.Environment (getArgs, getProgName)
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
 # ifdef OS_Win32
 import System.IO (hFlush, stdout)
 # endif
 
-print' :: Show a => a -> IO ()
-putStrLn' :: String -> IO ()
+log' :: String -> IO ()
 # ifdef OS_Win32
 -- for win32 environment, force buffer flush every method call.
-print' x    = print x    >> hFlush stdout
-putStrLn' x = putStrLn x >> hFlush stdout
+log' x = putStrLn x >> hFlush stdout
 # else
-print' = print
-putStrLn' = putStrLn
+log' = putStrLn
 # endif
-
--- | fork and run a given command, and then Return stdout.
--- >>> take 2 `fmap` words `fmap` run ["ghc", "--version"]
--- ["The","Glorious"]
-run :: [String] -> IO String
-run (pname:args) = readProcess pname args ""
-run _ = return "No command specified."
-
--- | Watch current folder and trigger action.
--- | It will deactivate itself while running action.
-watch :: [String] -> IO ()
-watch cmd = do
-  mgr <- FSN.startManager
-  _ <- FSN.watchTree mgr "." (const True) $ \evt -> do
-    _ <- FSN.stopManager mgr
-    print' evt
-    putStrLn' $ " > " ++ unwords cmd
-    run cmd >>= putStrLn'
-    watch cmd
-  return ()
 
 main :: IO ()
 main = do
-  cmd <- getArgs
-  if null cmd
-    then putStrLn' "Please provide a command as a argument."
-    else do
-      putStrLn' $ "fmon starting... command = " ++ (unwords cmd)
-      watch cmd
+  argv <- getArgs
+  progname <- getProgName
+  opts <- parseOpts argv progname
+  case opts of
+    (Options { optVersion = True }, _) -> log' $ "fmon " ++ showVersion version
+    (Options { optHelp    = True }, usage) -> log' $ unwords usage
+    (_, cmd) -> do
+      log' $ progname ++ " starting... command = " ++ (unwords cmd)
+      watch cmd log'
       forever $ threadDelay maxBound
 

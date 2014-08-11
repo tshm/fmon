@@ -1,5 +1,5 @@
 name:                fmon
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            command runner based on filesystem changes
 description:         small utility to run specified command when file gets modified / deleted in specified folder.  Utilizes fsnotify library.
 homepage:            http://github.com/tshm/fmon.haskell
