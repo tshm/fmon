@@ -1,0 +1,28 @@
+name:                fmon
+version:             0.1.0.0
+synopsis:            command runner based on filesystem changes
+description:         small utility to run specified command when file gets modified / deleted in specified folder.  Utilizes fsnotify library.
+homepage:            http://github.com/tshm/fmon.haskell
+license:             MIT
+license-file:        LICENSE
+author:              toshihide satake
+maintainer:          2sm@csc.jp
+-- copyright:           
+category:            System
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable fmon
+  main-is:             fmon.hs
+  -- other-modules:       
+  build-depends:       base ==4.6.*
+                     , process
+                     , fsnotify
+  GHC-Options: -Wall -threaded
+  if os(windows)
+    CPP-Options: -DOS_Win32
+
+source-repository head
+  type:              git
+  location:          git:://github.com/tshm/fmon.haskell
+
