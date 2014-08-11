@@ -1,2 +1,9 @@
 language: haskell
-
+deploy:
+  provider: releases
+  api_key:
+    secure: XOV4cFwfW52TxbWGNAeVI1BnSmnVboHv1z9gh1gq1zJzgoPqzXjSE+fJYi4MsoCHUueZpl0tTJXPwIGcusp5drT/8FePbHEj5veEf3e92pCwF3P/Oy1i6xWRLt23PcpbxIBJBcsAgG2GVOESy3pfsZd1lDA02IL7sicL56kYWVE=
+  file: "dist/build/fmon/fmon"
+  skip_cleanup: true
+  on:
+    repo: tshm/fmon.haskell
