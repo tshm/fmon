@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 import System.Environment (getArgs)
 import System.Process (readProcess)
-import qualified System.FSNotify as FSN -- (withManagerConf, watchTree, Event, defaultConfig)
+import qualified System.FSNotify as FSN
 import System.IO (hFlush, stdout)
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
@@ -17,17 +17,20 @@ print' = print
 putStrLn' = putStrLn
 # endif
 
+-- | fork and run a given command, and then Return stdout.
 run :: [String] -> IO String
 run (pname:args) = readProcess pname args ""
 run _ = return "No command specified."
 
+-- | Watch current folder and trigger action.
+-- | It will deactivate itself while running action.
 watch :: [String] -> IO ()
 watch cmd = do
   mgr <- FSN.startManager
   _ <- FSN.watchTree mgr "." (const True) $ \evt -> do
     _ <- FSN.stopManager mgr
     print' evt
-    putStrLn' $ unwords cmd
+    putStrLn' $ " > " ++ unwords cmd
     run cmd >>= putStrLn'
     watch cmd
   return ()
