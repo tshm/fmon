@@ -18,6 +18,8 @@ putStrLn' = putStrLn
 # endif
 
 -- | fork and run a given command, and then Return stdout.
+-- >>> take 2 `fmap` words `fmap` run ["ghc", "--version"]
+-- ["The","Glorious"]
 run :: [String] -> IO String
 run (pname:args) = readProcess pname args ""
 run _ = return "No command specified."

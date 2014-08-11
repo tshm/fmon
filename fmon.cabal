@@ -26,3 +26,11 @@ source-repository head
   type:              git
   location:          git:://github.com/tshm/fmon.haskell
 
+test-suite doctests
+  type:          exitcode-stdio-1.0
+  ghc-options:   -threaded
+  main-is:       test.hs
+  build-depends:       base ==4.6.*
+                     , process
+                     , fsnotify
+                     , doctest >= 0.8
