@@ -2,9 +2,11 @@
 import System.Environment (getArgs)
 import System.Process (readProcess)
 import qualified System.FSNotify as FSN
-import System.IO (hFlush, stdout)
 import Control.Concurrent (threadDelay)
 import Control.Monad (forever)
+# ifdef OS_Win32
+import System.IO (hFlush, stdout)
+# endif
 
 print' :: Show a => a -> IO ()
 putStrLn' :: String -> IO ()
