@@ -6,4 +6,6 @@ deploy:
   file: "dist/build/fmon/fmon"
   skip_cleanup: true
   on:
+    tags: true
+    all_branches: true
     repo: tshm/fmon.haskell
