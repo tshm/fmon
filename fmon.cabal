@@ -31,6 +31,8 @@ test-suite doctests
   ghc-options:   -threaded
   main-is:       test.hs
   build-depends:       base ==4.6.*
+                     , filepath
+                     , directory
                      , process
                      , fsnotify
                      , doctest >= 0.8
