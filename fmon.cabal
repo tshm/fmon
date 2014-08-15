@@ -1,5 +1,5 @@
 name:                fmon
-version:             0.2.0.0
+version:             0.2.0.2
 synopsis:            command runner based on filesystem changes
 description:         small utility to run specified command when file gets modified / deleted in specified folder.  Utilizes fsnotify library.
 homepage:            http://github.com/tshm/fmon.haskell
@@ -14,6 +14,8 @@ cabal-version:       >=1.8
 
 executable fmon
   main-is:             fmon.hs
+  other-modules:       Watch
+                     , OptionParser
   -- other-modules:       
   build-depends:       base ==4.6.*
                      , process
@@ -24,7 +26,7 @@ executable fmon
 
 source-repository head
   type:              git
-  location:          git:://github.com/tshm/fmon.haskell
+  location:          git://github.com/tshm/fmon.haskell
 
 test-suite doctests
   type:          exitcode-stdio-1.0
