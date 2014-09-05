@@ -25,10 +25,10 @@ main = do
   progname <- getProgName
   opts <- parseOpts argv progname
   case opts of
-    (Options { optVersion = True }, _) -> log' $ "fmon " ++ showVersion version
-    (Options { optHelp    = True }, usage) -> log' $ unwords usage
-    (_, cmd) -> do
+    (Options {optVersion = True}, _) -> log' $ "fmon " ++ showVersion version
+    (Options {optHelp    = True}, usage) -> log' $ unwords usage
+    (Options {optDir = dir, optShallow = shallow}, cmd) -> do
       log' $ progname ++ " starting... command = " ++ (unwords cmd)
-      watch cmd log'
+      watch dir shallow cmd log'
       forever $ threadDelay maxBound
 
