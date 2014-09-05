@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Watch where
 import System.Process (readProcessWithExitCode)
 import qualified System.FSNotify as FSN
