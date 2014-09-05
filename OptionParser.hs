@@ -54,5 +54,5 @@ parseOpts argv progname =
     where
       usage = O.usageInfo header options
       showUsage errs = ioError (userError (concat errs ++ usage))
-      header = "Usage: " ++ progname ++ " [OPTION...] files..."
+      header = "Usage: " ++ progname ++ " [OPTION...] command string..."
 
