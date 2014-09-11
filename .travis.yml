@@ -8,4 +8,4 @@ deploy:
   on:
     tags: true
     all_branches: true
-    repo: tshm/fmon.haskell
+    repo: tshm/fmon
