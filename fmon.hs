@@ -27,8 +27,8 @@ main = do
   case opts of
     (Options {optVersion = True}, _) -> log' $ "fmon " ++ showVersion version
     (Options {optHelp    = True}, usage) -> log' $ unwords usage
-    (Options {optDir = dir, optShallow = shallow}, cmd) -> do
+    (Options {optDir = dir, optRecurse = recurse}, cmd) -> do
       log' $ progname ++ " starting... command = " ++ (unwords cmd)
-      watch dir shallow cmd log'
+      watch dir recurse cmd log'
       forever $ threadDelay maxBound
 

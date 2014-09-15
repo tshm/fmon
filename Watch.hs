@@ -16,14 +16,14 @@ run _ = return "No command specified."
 -- | Watch current folder and trigger action.
 -- | It will deactivate itself while running action.
 watch :: FilePath -> Bool -> [String] -> (String -> IO ()) -> IO ()
-watch dir shallow cmd log' = do
+watch dir recurse cmd log' = do
   mgr <- FSN.startManager
   _ <- watchFunc mgr (fromString dir) (const True) $ \evt -> do
     _ <- FSN.stopManager mgr
     log' $ show evt
     log' $ " > " ++ unwords cmd
     run cmd >>= log'
-    watch dir shallow cmd log'
+    watch dir recurse cmd log'
   return ()
-    where watchFunc = if shallow then FSN.watchDir else FSN.watchTree
+    where watchFunc = if recurse then FSN.watchTree else FSN.watchDir
 

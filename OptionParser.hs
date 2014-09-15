@@ -5,7 +5,7 @@ data Options = Options
   { optHelp    :: Bool
   , optVersion :: Bool
   , optDir     :: FilePath
-  , optShallow :: Bool
+  , optRecurse :: Bool
   } deriving Show
 
 defaultOptions :: Options
@@ -13,7 +13,7 @@ defaultOptions = Options
   { optHelp    = False
   , optVersion = False
   , optDir     = "."
-  , optShallow = False
+  , optRecurse = False
   }
 
 options :: [O.OptDescr (Options -> Options)]
@@ -27,17 +27,17 @@ options =
   , O.Option "d" ["directory"]
       (O.ReqArg (\d opts -> opts { optDir = d }) "DIR")
       "directory to watch"
-  , O.Option "s" ["shallow"]
-      (O.NoArg (\opts -> opts { optShallow = True }))
-      "do not watch recursively"
+  , O.Option "r" ["recurse"]
+      (O.NoArg (\opts -> opts { optRecurse = True }))
+      "watch directory recursively"
   ]
 
 -- | parse command line argument into list of options
 -- >>> fmap fst $ parseOpts ["-v", "test"] "fmon"
--- Options {optHelp = False, optVersion = True, optDir = ".", optShallow = False}
+-- Options {optHelp = False, optVersion = True, optDir = ".", optRecurse = False}
 --
 -- >>> fmap fst $ parseOpts ["-h", "test"] "fmon"
--- Options {optHelp = True, optVersion = False, optDir = ".", optShallow = False}
+-- Options {optHelp = True, optVersion = False, optDir = ".", optRecurse = False}
 --
 -- >>> fmap (head . words . head . snd) $ parseOpts ["-h", "test"] "fmon"
 -- "Usage:"
@@ -47,16 +47,16 @@ options =
 --     (parseOpts ["-x", "test"] "fmon")
 --     (\_ -> return (defaultOptions, ["xx"]))
 -- :}
--- (Options {optHelp = False, optVersion = False, optDir = ".", optShallow = False},["xx"])
+-- (Options {optHelp = False, optVersion = False, optDir = ".", optRecurse = False},["xx"])
 --
 -- >>> parseOpts ["cmd", "test"] "fmon"
--- (Options {optHelp = False, optVersion = False, optDir = ".", optShallow = False},["cmd","test"])
+-- (Options {optHelp = False, optVersion = False, optDir = ".", optRecurse = False},["cmd","test"])
 --
 -- >>> parseOpts ["-d", "dir", "cmd"] "fmon"
--- (Options {optHelp = False, optVersion = False, optDir = "dir", optShallow = False},["cmd"])
+-- (Options {optHelp = False, optVersion = False, optDir = "dir", optRecurse = False},["cmd"])
 --
--- >>> parseOpts ["-s", "cmd"] "fmon"
--- (Options {optHelp = False, optVersion = False, optDir = ".", optShallow = True},["cmd"])
+-- >>> parseOpts ["-r", "cmd"] "fmon"
+-- (Options {optHelp = False, optVersion = False, optDir = ".", optRecurse = True},["cmd"])
 --
 parseOpts :: [String] -> String -> IO (Options, [String])
 parseOpts argv progname =
