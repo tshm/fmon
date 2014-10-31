@@ -12,17 +12,24 @@ category:            System
 build-type:          Simple
 cabal-version:       >=1.8
 
+Flag Debug
+  Description: Enable debug support
+  Default:     False
+
 executable fmon
   main-is:             fmon.hs
   other-modules:       Watch
                      , OptionParser
   -- other-modules:       
-  build-depends:       base ==4.6.*
+  build-depends:       base ==4.7.*
                      , process
                      , fsnotify
   GHC-Options: -Wall -threaded
   if os(windows)
     CPP-Options: -DOS_Win32
+
+  if flag(debug)
+    CPP-Options: -DDEBUG
 
 source-repository head
   type:              git
@@ -32,9 +39,9 @@ test-suite doctests
   type:          exitcode-stdio-1.0
   ghc-options:   -threaded
   main-is:       test.hs
-  build-depends:       base ==4.6.*
+  build-depends:       base ==4.7.*
                      , filepath
                      , directory
                      , process
                      , fsnotify
-                     , doctest >= 0.8
+                     , doctest >= 0.9

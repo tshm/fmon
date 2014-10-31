@@ -1,8 +1,16 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
+# ifdef DEBUG
+{-# LANGUAGE StandaloneDeriving #-}
+# endif
 module Watch where
 import System.Process (readProcessWithExitCode)
 import Data.String (fromString)
 import qualified System.FSNotify as FSN
+# ifdef DEBUG
+deriving instance Show FSN.WatchConfig
+deriving instance Show FSN.Debounce
+# endif
 
 -- | fork and run a given command, and then Return stdout.
 -- >>> take 2 `fmap` words `fmap` run ["ghc", "--version"]
@@ -22,6 +30,9 @@ watch dir recurse cmd log' = do
     _ <- FSN.stopManager mgr
     log' $ show evt
     log' $ " > " ++ unwords cmd
+# ifdef DEBUG
+    log' $ show FSN.defaultConfig
+# endif
     run cmd >>= log'
     watch dir recurse cmd log'
   return ()
