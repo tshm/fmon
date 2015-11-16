@@ -21,7 +21,7 @@ executable fmon
   other-modules:       Watch
                      , OptionParser
   -- other-modules:       
-  build-depends:       base ==4.7.*
+  build-depends:       base >= 4.3.1.0 && < 5
                      , process
                      , fsnotify
   GHC-Options: -Wall -threaded
@@ -39,9 +39,9 @@ test-suite doctests
   type:          exitcode-stdio-1.0
   ghc-options:   -threaded
   main-is:       test.hs
-  build-depends:       base ==4.7.*
+  build-depends:       base >= 4.3.1.0 && < 5
                      , filepath
                      , directory
                      , process
                      , fsnotify
-                     , doctest >= 0.9
+                     , doctest
