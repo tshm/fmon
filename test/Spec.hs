@@ -2,19 +2,18 @@ import Test.DocTest
 import System.FilePath
 import System.Directory
 
-excludeFiles :: [FilePath]
-excludeFiles = ["fmon.hs", "Test.hs", "Setup.hs"]
-
 -- |
--- >>> collectTestFiles ["a.cpp","a.hs","c",".d","fmon.hs"]
+-- >>> collectTestFiles ["a.cpp","a.hs","c",".d"]
 -- ["a.hs"]
+--
 collectTestFiles :: [FilePath] -> [FilePath]
-collectTestFiles files = filter (\n -> isHs n && inc n) files where
+collectTestFiles files = filter isHs files where
   isHs = (== ".hs") . snd . splitExtension
-  inc n = not $ elem n excludeFiles
 
 main :: IO ()
 main = do
+  setCurrentDirectory "src"
   files <- fmap collectTestFiles $ getDirectoryContents "."
+  -- mapM_ print files
   doctest $ "-isrc" : files
 

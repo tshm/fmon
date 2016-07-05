@@ -5,25 +5,37 @@ description:         small utility to run specified command when file gets modif
 homepage:            http://github.com/tshm/fmon.haskell
 license:             MIT
 license-file:        LICENSE
-author:              toshihide satake
+author:              tosh satake
 maintainer:          2sm@csc.jp
--- copyright:           
+-- copyright:           tosh stake
 category:            System
 build-type:          Simple
-cabal-version:       >=1.8
+-- extra-source-files:
+cabal-version:       >=1.10
 
 Flag Debug
   Description: Enable debug support
   Default:     False
 
-executable fmon
-  main-is:             fmon.hs
-  other-modules:       Watch
+library
+  hs-source-dirs:      src
+  exposed-modules:     Watch
                      , OptionParser
-  -- other-modules:       
-  build-depends:       base >= 4.3.1.0 && < 5
+  build-depends:       base >= 4.7 && < 5
                      , process
                      , fsnotify
+  default-language:    Haskell2010
+
+
+executable fmon
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  build-depends:       base
+                     , fmon
+                     , process
+                     , fsnotify
+  default-language:    Haskell2010
+
   GHC-Options: -Wall -threaded
   if os(windows)
     CPP-Options: -DOS_Win32
@@ -32,16 +44,19 @@ executable fmon
     CPP-Options: -DDEBUG
 
 source-repository head
-  type:              git
-  location:          git://github.com/tshm/fmon
+  type:     git
+  location: https://github.com/tshm/fmon
 
 test-suite doctests
-  type:          exitcode-stdio-1.0
-  ghc-options:   -threaded
-  main-is:       test.hs
-  build-depends:       base >= 4.3.1.0 && < 5
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , fmon
                      , filepath
                      , directory
                      , process
                      , fsnotify
                      , doctest
+  default-language:    Haskell2010
+
