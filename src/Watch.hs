@@ -15,6 +15,7 @@ deriving instance Show FSN.Debounce
 -- | fork and run a given command, and then Return stdout.
 -- >>> take 2 `fmap` words `fmap` run ["ghc", "--version"]
 -- ["The","Glorious"]
+--
 run :: [String] -> IO String
 run (pname:args) = do
   (_, out, err) <- readProcessWithExitCode pname args ""

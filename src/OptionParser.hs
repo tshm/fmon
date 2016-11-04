@@ -58,11 +58,14 @@ options =
 -- >>> parseOpts ["-r", "cmd"] "fmon"
 -- (Options {optHelp = False, optVersion = False, optDir = ".", optRecurse = True},["cmd"])
 --
+-- >>> fmap (head . words . head . snd) $ parseOpts [] "fmon"
+-- "Usage:"
+--
 parseOpts :: [String] -> String -> IO (Options, [String])
 parseOpts argv progname =
   case O.getOpt O.Permute options argv of
-    (o,n,[]  ) -> if optHelp resultOptions 
-                    then return (resultOptions, [usage])
+    (o,n,[]  ) -> if optHelp resultOptions || n == []
+                    then return (resultOptions { optHelp = True }, [usage])
                     else return (resultOptions, n)
                where
       resultOptions = foldl (flip id) defaultOptions o
